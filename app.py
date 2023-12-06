@@ -11,7 +11,7 @@ demo = gr.Interface(video_identity,
                     "playable_video", 
                     examples=[
                         os.path.join(os.path.dirname(__file__), 
-                                     "video/video_sample.mp4")], 
+                                     "video/test_video.mp4")], 
                     cache_examples=True)
 
 if __name__ == "__main__":
