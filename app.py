@@ -1,6 +1,7 @@
 import gradio as gr
 import os
 import requests
+from dir import videoIndexer
 
 # Define your endpoint URL and subscription key
 endpoint_url = "https://explosion.cognitiveservices.azure.com/computervision/retrieval/indexes/my-video-index:queryByText?api-version=2023-05-01-preview"
