@@ -3,7 +3,7 @@ import os
 import requests
 
 # Define your endpoint URL and subscription key
-endpoint_url = "https://https://explosion.cognitiveservices.azure.com//computervision/retrieval/indexes/my-video-index:queryByText?api-version=2023-05-01-preview"
+endpoint_url = "https://explosion.cognitiveservices.azure.com/computervision/retrieval/indexes/my-video-index:queryByText?api-version=2023-05-01-preview"
 subscription_key = "c54eec632ae5413e8075e3f825727822"
 
 def video_identity(video):
