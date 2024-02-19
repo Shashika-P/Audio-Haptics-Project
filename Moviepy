@@ -1,0 +1,55 @@
+from moviepy.editor import *
+
+current_video_path=r"C:\Users\ASUS\Downloads\Introducing the New Range Rover Sport-gWS1wLfiDVU-480pp-1703424984.mp4"
+current_video=VideoFileClip(current_video_path)   #location of the uploaded video
+
+current_audio_path="current_audio.mp3"
+if  current_video.audio is not None:
+    current_video.audio.write_audiofile(current_audio_path)   #location of the audio clip
+    print("Audio file has been extracted from the video")
+else:
+    print("No audio found in the video.")
+
+current_audio=AudioFileClip(current_audio_path)   #location of the whole audio clip from the uloaded video
+
+
+#define the segements for the audio clips
+start_explosion_time=3   # Define the start time of the explosion part
+end_explosion_time = 6   # Define the end time of the explosion part
+
+#extract audio segements
+beginning_audio_clip=current_audio.subclip(0,start_explosion_time)  #0 = start, end value will be the beginning of the explotion part
+end_audio_clip=current_audio.subclip(end_explosion_time,)  #start = end of the explotion, end = end of the audio
+
+#haptic_audio_clip=current_audio.subclip(start_explosion_time,end_explosion_time)   #start = start of the explotion, end = end of the explotion
+
+haptic_audio_path='https://phonebrrdemonstration2.blob.core.windows.net/audio3secondsmp3/3_second_explosion_00001.mp3'
+haptic_audio=AudioFileClip(haptic_audio_path)
+haptic_audio_clip=haptic_audio.subclip()    #start = start of the explotion, end = end of the explotion
+
+#concatenate audio clips to create enhanced audio
+final_audio=concatenate_audioclips([beginning_audio_clip,haptic_audio_clip,end_audio_clip]) #enhanced audio
+
+#save the enhanced audio
+final_audio_path="output.mp3"
+final_audio.write_audiofile(final_audio_path)   #enhanced audio "name"
+print("Enhanced audio has been created")
+
+#create a video without audio
+extracted_video=current_video.without_audio()
+
+#save the video without audio
+extracted_video_path="output.mp4"
+extracted_video.write_videofile(extracted_video_path,fps=60)
+print("Video without audio has been created")
+
+
+#combine the final video without the enhanced audio
+final_video=extracted_video.set_audio(final_audio)
+
+#save the final video
+final_video_path="final_video.mp4"
+final_video.write_videofile(final_video_path)
+print("final video has been created")
+
+
