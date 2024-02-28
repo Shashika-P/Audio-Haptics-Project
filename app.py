@@ -1,10 +1,29 @@
 import gradio as gr
-import os
+import os  
 
+isFileType = False # To return true if the file type is 'mp4'
+isFileSize = False # To return true if the file > 16mb
 
-def video_identity(video):    
-    return video
+# Validate the video file
+def predict_video(input_video):
+    filename = input_video.name  # Get the uploaded filename
+    file_size = os.path.getsize(input_video) # Get the file size in bytes
 
+    # Check if it's not an MP4 file
+    if not filename.lower().endswith('.mp4'):
+        isFileType = True
+        return "Error: Please upload an MP4 video file."
+    
+    # Checks if the file is above 16mb
+    if file_size > 16 *1024 * 1024: # 1mb = 1024bytes
+        isFileSize = True
+        return "Error: The upload exceeds file size 16MB. Please upload a smaller file."
+
+    # Your processing code here (if the file type is correct)
+    return "Video processed successfully!"
+
+inputs = gr.File(label="Upload a video")
+output = gr.Textbox()
 
 with gr.Blocks() as demo:
     gr.Markdown(
@@ -21,15 +40,8 @@ with gr.Blocks() as demo:
     Step 3: Mix the Audio using any app of your choice and master the audio with <a href="https://aimastering.com/">ai-mastering program</a> 
 
     """),
-    gr.Interface(video_identity,                     
-                    gr.Video(),                     
-                    "playable_video",                     
-                    examples=[
-                        os.path.join(os.path.dirname(__file__), 
-                                     "video/test_video.mp4")], 
-                    cache_examples=True)
+
+    gr.Interface(fn=predict_video, inputs=inputs, outputs=output).launch()
 
 if __name__ == "__main__":    
     demo.launch(share=True)
-
-
