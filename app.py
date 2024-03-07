@@ -1,47 +1,75 @@
 import gradio as gr
-import os  
+import os
 
-isFileType = False # To return true if the file type is 'mp4'
-isFileSize = False # To return true if the file > 16mb
 
-# Validate the video file
-def predict_video(input_video):
-    filename = input_video.name  # Get the uploaded filename
-    file_size = os.path.getsize(input_video) # Get the file size in bytes
+def predict_video(input_video, input_audio=None):
+  """
+  Processes the uploaded video (replace with your video analysis logic).
 
-    # Check if it's not an MP4 file
-    if not filename.lower().endswith('.mp4'):
-        isFileType = True
-        return "Error: Please upload an MP4 video file."
-    
-    # Checks if the file is above 16mb
-    if file_size > 16 *1024 * 1024: # 1mb = 1024bytes
-        isFileSize = True
-        return "Error: The upload exceeds file size 16MB. Please upload a smaller file."
+  Args:
+      input_video: The uploaded video file object.
+      input_audio (optional): The uploaded audio file object (MP3).
 
-    # Your processing code here (if the file type is correct)
-    return "Video processed successfully!"
+  Returns:
+      A list containing the processed video and a message string.
+  """
+  # Placeholder processing (replace with actual video analysis)
+  message = "**Placeholder:** Video processing not implemented yet."
 
-inputs = gr.File(label="Upload a video")
-output = gr.Textbox()
+  # You can optionally add a progress bar or loading indicator here
 
-with gr.Blocks() as demo:
-    gr.Markdown(
-    """
-    # Phone brr
-    Welcome to the Hugging face Space of Phone brr we aim to create more immersive content for mobile phones with the use of haptic audio, this demo focuses on working for a very commonly used special effect of explosions hope you enjoy it.
+  if input_audio is None:
+    return [input_video, message + " Generated Audio will be used"]
+  return [input_video, message + f" Using uploaded audio: {input_audio.name}"]
 
-    Instructions
-     
-    Step 1: Upload the example video to get the relevant timeframes that require haptics <a href="https://portal.vision.cognitive.azure.com/demo/video-summary-and-frame-locator">Azure Cognitive Services Video Summary and Frame Locator</a> with explosions as the query.
 
-    Step 2: Download the generated audio from <a href="https://phonebrrdemonstration2.blob.core.windows.net/audio3second0001/3_second_explosion_00001.flac">this ai-generated haptic audio</a>.
+css = """
+#col-container {
+  margin: 0 auto;
+  max-width: 800px;
+}
+"""
 
-    Step 3: Mix the Audio using any app of your choice and master the audio with <a href="https://aimastering.com/">ai-mastering program</a> 
+with gr.Blocks(css=css) as demo:
+  with gr.Column(elem_id="col-container"):
+    gr.HTML("""
+      <h2>Phone brr</h2>
+      <h3>Welcome to the Hugging Face Space of Phone brr! We aim to create more immersive content for mobile phones with the use of haptic audio, this demo focuses on working for a very commonly used special effect of explosions hope you enjoy it.</h3>
 
-    """),
+      <p>Instructions:
+        <br>Step 1: Upload your video.
+        <br>Step 2: (Optional) Upload an MP3 audio track.
+        <br>Step 3: We'll analyze the video and suggest explosion timeframes using Azure Cognitive Services (not included yet).
+        <br>Step 4: Download haptic explosion audio from [link to audio source].
+        <br>Step 5: Mix the Audio using any app of your choice and master the audio with an AI mastering program (links provided).
+      </p>
+    """)
 
-    gr.Interface(fn=predict_video, inputs=inputs, outputs=output).launch()
+  with gr.Row():
+    with gr.Column():
+      video_in = gr.File(label="Upload a Video", file_types=[".mp4"])
+      with gr.Row():
+        audio_in = gr.File(label="Optional: Upload an Audio Track", file_types=[".mp3"])
+    with gr.Column():
+      video_out = gr.Video(label="Output Video")
+      with gr.Row():
+        text_out = gr.Textbox(label="Output Text")
 
-if __name__ == "__main__":    
-    demo.launch(share=True)
+  gr.Examples(
+      examples=[[os.path.join(os.path.dirname(__file__), "video/test1.mp4"),
+                os.path.join(os.path.dirname(__file__), "video/audioTrack.mp3")]],
+      fn=predict_video,
+      inputs=[video_in, audio_in],
+      outputs=[video_out, text_out],
+      cache_examples=True  # Cache examples for faster loading
+  )
+
+  video_in.change(
+      fn=predict_video,
+      inputs=[audio_in],
+      outputs=[video_out, text_out],
+      queue=False
+  )
+
+
+demo.launch(debug=True)
