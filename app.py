@@ -56,7 +56,7 @@ with gr.Blocks(css=css) as demo:
         text_out = gr.Textbox(label="Output Text")
 
   gr.Examples(
-      examples=[[os.path.join(os.path.dirname(__file__), "video/test1.mp4"),
+      examples=[[os.path.join(os.path.dirname(__file__), "video/test_video.mp4"),
                 os.path.join(os.path.dirname(__file__), "video/audioTrack.mp3")]],
       fn=predict_video,
       inputs=[video_in, audio_in],
