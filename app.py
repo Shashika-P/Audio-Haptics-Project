@@ -1,8 +1,23 @@
 import gradio as gr
 import os
 
-
 def predict_video(input_video, input_audio=None):
+  global filename, file_size  # Use the global keyword to refer to the global variables
+  
+  # Check if the video is available
+  if input_video is None:
+    return [None, "Please upload a video"]
+
+  filename = input_video.name  # Get the uploaded filename
+  file_size = os.path.getsize(input_video.name)  # Get the file size in bytes
+
+  # Loop until a valid video is uploaded
+  if not filename.lower().endswith('.mp4'):
+    return [None, "Error: Please upload an MP4 video file."]
+
+  if file_size > 16 * 1024 * 1024:
+    return [None, "Error: The upload exceeds file size 16MB. Please upload a smaller file."]
+  
   """
   Processes the uploaded video (replace with your video analysis logic).
 
@@ -45,15 +60,15 @@ with gr.Blocks(css=css) as demo:
       </p>
     """)
 
-  with gr.Row():
-    with gr.Column():
-      video_in = gr.File(label="Upload a Video", file_types=[".mp4"])
-      with gr.Row():
-        audio_in = gr.File(label="Optional: Upload an Audio Track", file_types=[".mp3"])
-    with gr.Column():
-      video_out = gr.Video(label="Output Video")
-      with gr.Row():
-        text_out = gr.Textbox(label="Output Text")
+    with gr.Row():
+        with gr.Column():
+          video_in = gr.File(label="Upload a Video", file_types=[".mp4"])
+        with gr.Column():
+           audio_in = gr.File(label="Optional: Upload an Audio Track", file_types=[".mp3"])
+        with gr.Column():
+          video_out = gr.Video(label="Output Video")
+          with gr.Row():
+            text_out = gr.Textbox(label="Output Text")
 
   gr.Examples(
       examples=[[os.path.join(os.path.dirname(__file__), "video/test_video.mp4"),
@@ -66,10 +81,10 @@ with gr.Blocks(css=css) as demo:
 
   video_in.change(
       fn=predict_video,
-      inputs=[audio_in],
+      inputs=[video_in, audio_in],  # Use both video and audio inputs here
       outputs=[video_out, text_out],
       queue=False
-  )
+    )
 
 
 demo.launch(debug=True)
