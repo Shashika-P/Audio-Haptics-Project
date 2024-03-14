@@ -1,55 +1,106 @@
 from moviepy.editor import *
+import json
 
-current_video_path=r"C:\Users\ASUS\Downloads\Introducing the New Range Rover Sport-gWS1wLfiDVU-480pp-1703424984.mp4"
-current_video=VideoFileClip(current_video_path)   #location of the uploaded video
 
-current_audio_path="current_audio.mp3"
-if  current_video.audio is not None:
-    current_video.audio.write_audiofile(current_audio_path)   #location of the audio clip
+current_video_path = r"C:\Users\ASUS\Desktop\UoW\2ND YEAR\SDGP\Test Video\test_video.mp4"
+current_video = VideoFileClip(current_video_path)  # location of the uploaded video
+output_query_response = '{"value":[{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:00:16","end":"00:00:26","best":"00:00:21","relevance":0.4005849361419678},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:00:06","end":"00:00:16","best":"00:00:09","relevance":0.38852864503860474},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:01:42","end":"00:01:58","best":"00:01:43","relevance":0.38718080520629883},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:01:58","end":"00:02:14","best":"00:02:03","relevance":0.3811851143836975},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:00:42","end":"00:00:52","best":"00:00:42","relevance":0.3765566647052765},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:00:26","end":"00:00:42","best":"00:00:28","relevance":0.3718773126602173},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:01:08","end":"00:01:24","best":"00:01:10","relevance":0.3707084357738495},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:01:37","end":"00:01:42","best":"00:01:38","relevance":0.36235538125038147},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:01:29","end":"00:01:37","best":"00:01:33","relevance":0.3606133460998535},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:01:03","end":"00:01:08","best":"00:01:04","relevance":0.3513660728931427},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:00:00","end":"00:00:06","best":"00:00:05","relevance":0.3378048241138458}]}'  # JSON response
+
+
+# Convert JSON string to Python dictionary
+data = json.loads(output_query_response)
+
+
+# creating an empty array for the results
+result = []
+
+
+# iterate over every explosion occurrence and find start, end, best values using the ml algorithm
+for i in data["value"]:
+    result.append([i["start"], i["end"], i["best"]])
+
+
+# update start_explosion_time and end_explosion_time for each explosion occurrence
+for explosion in result:
+    best_time = explosion[2]
+    best_time_seconds = sum(x * int(t) for x, t in zip([3600, 60, 1], best_time.split(":")))
+    start_explosion_time_seconds = best_time_seconds - 1
+    end_explosion_time_seconds = best_time_seconds + 2
+    explosion[0] = "{:02d}:{:02d}:{:02d}".format(start_explosion_time_seconds // 3600,
+                                                 (start_explosion_time_seconds % 3600 // 60),
+                                                 start_explosion_time_seconds % 60)
+    explosion[1] = "{:02d}:{:02d}:{:02d}".format(end_explosion_time_seconds // 3600,
+                                                 (end_explosion_time_seconds % 3600 // 60),
+                                                 end_explosion_time_seconds % 60)
+
+
+# Extracting audio from the video
+current_audio_path = "current_audio.mp3"
+if current_video.audio is not None:
+    current_video.audio.write_audiofile(current_audio_path)  # location of the audio clip
     print("Audio file has been extracted from the video")
 else:
     print("No audio found in the video.")
 
-current_audio=AudioFileClip(current_audio_path)   #location of the whole audio clip from the uloaded video
+
+# Loading the whole audio clip from the uploaded video
+current_audio = AudioFileClip(current_audio_path)
 
 
-#define the segements for the audio clips
-start_explosion_time=3   # Define the start time of the explosion part
-end_explosion_time = 6   # Define the end time of the explosion part
+# define the segments for the audio clips
+final_audio_segments = []
+haptic_audio_path = 'https://phonebrrdemonstration2.blob.core.windows.net/audio3secondsmp3/3_second_explosion_00001.mp3'
+haptic_audio = AudioFileClip(haptic_audio_path)
 
-#extract audio segements
-beginning_audio_clip=current_audio.subclip(0,start_explosion_time)  #0 = start, end value will be the beginning of the explotion part
-end_audio_clip=current_audio.subclip(end_explosion_time,)  #start = end of the explotion, end = end of the audio
 
-#haptic_audio_clip=current_audio.subclip(start_explosion_time,end_explosion_time)   #start = start of the explotion, end = end of the explotion
+# Iterate through each explosion occurrence and create audio segments
+for explosion in result:
+    start_explosion_time = sum(x * int(t) for x, t in zip([3600, 60, 1], explosion[0].split(":")))
+    end_explosion_time = sum(x * int(t) for x, t in zip([3600, 60, 1], explosion[1].split(":")))
 
-haptic_audio_path='https://phonebrrdemonstration2.blob.core.windows.net/audio3secondsmp3/3_second_explosion_00001.mp3'
-haptic_audio=AudioFileClip(haptic_audio_path)
-haptic_audio_clip=haptic_audio.subclip()    #start = start of the explotion, end = end of the explotion
+    beginning_audio_clip = current_audio.subclip(0, start_explosion_time)
+    end_audio_clip = current_audio.subclip(end_explosion_time)
 
-#concatenate audio clips to create enhanced audio
-final_audio=concatenate_audioclips([beginning_audio_clip,haptic_audio_clip,end_audio_clip]) #enhanced audio
+    # Adjust the duration of the haptic audio to match the duration between start and end explosion times
+    haptic_audio_duration = end_explosion_time - start_explosion_time
+    haptic_audio_clip = haptic_audio.subclip(0, haptic_audio_duration)
 
-#save the enhanced audio
-final_audio_path="output.mp3"
-final_audio.write_audiofile(final_audio_path)   #enhanced audio "name"
+    final_audio = concatenate_audioclips([beginning_audio_clip, haptic_audio_clip, end_audio_clip])
+    final_audio_segments.append(final_audio)
+
+
+# concatenate final audio segments
+final_audio = concatenate_audioclips(final_audio_segments)
+
+
+# Match the audio duration with the video duration
+final_audio = final_audio.set_duration(current_video.duration)
+
+
+# Save the enhanced audio
+final_audio_path = "output.mp3"
+final_audio.write_audiofile(final_audio_path)
 print("Enhanced audio has been created")
 
-#create a video without audio
-extracted_video=current_video.without_audio()
 
-#save the video without audio
-extracted_video_path="output.mp4"
-extracted_video.write_videofile(extracted_video_path,fps=60)
+# create a video without audio
+extracted_video = current_video.without_audio()
+
+
+# save the video without audio
+extracted_video_path = "output.mp4"
+extracted_video.write_videofile(extracted_video_path, fps=60)
 print("Video without audio has been created")
 
 
-#combine the final video without the enhanced audio
-final_video=extracted_video.set_audio(final_audio)
+# combine the final video without the enhanced audio
+final_video = extracted_video.set_audio(final_audio)
 
-#save the final video
-final_video_path="final_video.mp4"
+
+# save the final video
+final_video_path = "final_video.mp4"
 final_video.write_videofile(final_video_path)
-print("final video has been created")
+print("Final video has been created")
+
 
 
