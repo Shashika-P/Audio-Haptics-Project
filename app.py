@@ -76,7 +76,7 @@ with gr.Blocks(css=css) as demo:
       fn=predict_video,
       inputs=[video_in, audio_in],
       outputs=[video_out, text_out],
-      cache_examples=True  # Cache examples for faster loading
+      cache_examples= False  # Cache examples for faster loading
   )
 
   video_in.change(
