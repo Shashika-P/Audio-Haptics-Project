@@ -126,8 +126,8 @@ def videoAnalysis(sas_token, sas_url, search):
 
     if response_query.text == """{"error":{"code":"InvalidRequest","message":"Value for indexName is invalid."}}""":
         videoAnalysis(sas_token,sas_url, search)    
-     
-    return response_query.text
+    else: 
+        return response_query.text
 
 #Enter the sas token
 sas_token_1 = "sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D"
@@ -141,9 +141,9 @@ test_explosion = videoAnalysis(sas_token_1, sas_url_1, instance_1)
 print(test_explosion)
 
 #Enter the sas token
-sas_token_2 = "sp=r&st=2024-03-18T08:37:02Z&se=2027-04-22T16:37:02Z&spr=https&sv=2022-11-02&sr=b&sig=UqvmHzf1jzdD6njwO1S7YhD5a%2B7hZHrd3q3FaeV1WNg%3D"
+sas_token_2 = "sp=r&st=2024-03-18T09:48:32Z&se=2026-07-02T17:48:32Z&spr=https&sv=2022-11-02&sr=b&sig=hLiFrDUtrutW9FWWRR7Z0Kbc4wkHs28YR9RXjVxw8uc%3D"
 #the sas url
-sas_url_2= "https://store1video.blob.core.windows.net/haptic-vid/desert_vehicle.mp4?sp=r&st=2024-03-18T08:37:02Z&se=2027-04-22T16:37:02Z&spr=https&sv=2022-11-02&sr=b&sig=UqvmHzf1jzdD6njwO1S7YhD5a%2B7hZHrd3q3FaeV1WNg%3D"
+sas_url_2= "https://store1video.blob.core.windows.net/haptic-vid/desert_vehicle_test.mp4?sp=r&st=2024-03-18T09:48:32Z&se=2026-07-02T17:48:32Z&spr=https&sv=2022-11-02&sr=b&sig=hLiFrDUtrutW9FWWRR7Z0Kbc4wkHs28YR9RXjVxw8uc%3D"
 #query of what you are looking for 
 instance_2 = "Vehicle racing" 
 
