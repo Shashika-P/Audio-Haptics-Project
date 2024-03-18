@@ -1,7 +1,15 @@
 import requests
 
+index_counter = 0  # Global counter for video indexes
+
 def videoAnalysis(sas_token, sas_url, search):
-    url = "https://explosion.cognitiveservices.azure.com/computervision/retrieval/indexes/my-video-index?api-version=2023-05-01-preview"
+    
+    global index_counter  # Access the global counter variable
+
+    index_counter += 1
+    index_name = f"video-index-{index_counter}"
+
+    url = f"https://explosion.cognitiveservices.azure.com/computervision/retrieval/indexes/{index_name}?api-version=2023-05-01-preview"
     headers = {
         "Ocp-Apim-Subscription-Key": "c54eec632ae5413e8075e3f825727822",
         "Content-Type": "application/json"
@@ -35,18 +43,15 @@ def videoAnalysis(sas_token, sas_url, search):
         ]
     }
 
-    # Assuming you want to create a new index with a different name
-    # Update the index name in the URL to make it unique
-    url = "https://explosion.cognitiveservices.azure.com/computervision/retrieval/indexes/new-video-index?api-version=2023-05-01-preview"
 
     response = requests.put(url, json=data, headers=headers)
     
     #test code for errors
-    #print("Response Status Code:", response.status_code)
-    #print("Response Content:", response.text)
+    print("Response Status Code:", response.status_code)
+    print("Response Content:", response.text)
 
 
-    url_index = "https://explosion.cognitiveservices.azure.com/computervision/retrieval/indexes/my-video-index/ingestions/my-ingestion?api-version=2023-05-01-preview"
+    url_index = f"https://explosion.cognitiveservices.azure.com/computervision/retrieval/indexes/{index_name}/ingestions/my-ingestion?api-version=2023-05-01-preview"
     headers = {
         "Ocp-Apim-Subscription-Key": "c54eec632ae5413e8075e3f825727822",
         "Content-Type": "application/json"
@@ -70,11 +75,11 @@ def videoAnalysis(sas_token, sas_url, search):
     response_index = requests.put(url_index, json=data_index, headers=headers)
 
     #test code for errors
-    #print("Index Ingestion - Response Status Code:", response_index.status_code)
-    #print("Index Ingestion - Response Content:", response_index.text)
+    print("Index Ingestion - Response Status Code:", response_index.status_code)
+    print("Index Ingestion - Response Content:", response_index.text)
 
     # Assuming you want to ingest another video with a different ingestion name
-    url_new_ingestion = "https://explosion.cognitiveservices.azure.com/computervision/retrieval/indexes/my-video-index/ingestions/new-ingestion?api-version=2023-05-01-preview"
+    url_new_ingestion = f"https://explosion.cognitiveservices.azure.com/computervision/retrieval/indexes/{index_name}/ingestions/new-ingestion?api-version=2023-05-01-preview"
 
     data_new_ingestion = {
         "videos": [
@@ -92,11 +97,11 @@ def videoAnalysis(sas_token, sas_url, search):
     response_new_ingestion = requests.put(url_new_ingestion, json=data_new_ingestion, headers=headers)
 
     #used to test code for errors
-    #print("New Ingestion - Response Status Code:", response_new_ingestion.status_code)
-    #print("New Ingestion - Response Content:", response_new_ingestion.text)
+    print("New Ingestion - Response Status Code:", response_new_ingestion.status_code)
+    print("New Ingestion - Response Content:", response_new_ingestion.text)
 
 
-    url_query = "https://explosion.cognitiveservices.azure.com/computervision/retrieval/indexes/my-video-index:queryByText?api-version=2023-05-01-preview"
+    url_query = f"https://explosion.cognitiveservices.azure.com/computervision/retrieval/indexes/{index_name}:queryByText?api-version=2023-05-01-preview"
     headers = {
         "Ocp-Apim-Subscription-Key": "c54eec632ae5413e8075e3f825727822",
         "Content-Type": "application/json"
@@ -119,6 +124,9 @@ def videoAnalysis(sas_token, sas_url, search):
 
     response_query = requests.post(url_query, json=data_query, headers=headers)
 
+    if response_query.text == """{"error":{"code":"InvalidRequest","message":"Value for indexName is invalid."}}""":
+        videoAnalysis(sas_token,sas_url, search)    
+     
     return response_query.text
 
 #Enter the sas token
@@ -133,9 +141,9 @@ test_explosion = videoAnalysis(sas_token_1, sas_url_1, instance_1)
 print(test_explosion)
 
 #Enter the sas token
-sas_token_2 = "sp=r&st=2024-03-17T11:55:51Z&se=2026-04-30T19:55:51Z&spr=https&sv=2022-11-02&sr=b&sig=RNdeiWnjbULMa3icBc1%2FqYuIVrdEMquvksokWZMVL20%3D"
+sas_token_2 = "sp=r&st=2024-03-18T08:37:02Z&se=2027-04-22T16:37:02Z&spr=https&sv=2022-11-02&sr=b&sig=UqvmHzf1jzdD6njwO1S7YhD5a%2B7hZHrd3q3FaeV1WNg%3D"
 #the sas url
-sas_url_2= "https://store1video.blob.core.windows.net/haptic-vid/suv-in-the-dust.mp4?sp=r&st=2024-03-17T11:55:51Z&se=2026-04-30T19:55:51Z&spr=https&sv=2022-11-02&sr=b&sig=RNdeiWnjbULMa3icBc1%2FqYuIVrdEMquvksokWZMVL20%3D"
+sas_url_2= "https://store1video.blob.core.windows.net/haptic-vid/desert_vehicle.mp4?sp=r&st=2024-03-18T08:37:02Z&se=2027-04-22T16:37:02Z&spr=https&sv=2022-11-02&sr=b&sig=UqvmHzf1jzdD6njwO1S7YhD5a%2B7hZHrd3q3FaeV1WNg%3D"
 #query of what you are looking for 
 instance_2 = "Vehicle racing" 
 
