@@ -1,5 +1,8 @@
 import gradio as gr
 import os
+import AzureBlobStorageVideo
+import AzureBlobStorageAudio
+
 
 def predict_video(input_video, input_audio=None):
   global filename, file_size  # Use the global keyword to refer to the global variables
@@ -15,8 +18,11 @@ def predict_video(input_video, input_audio=None):
   if not filename.lower().endswith('.mp4'):
     return [None, "Error: Please upload an MP4 video file."]
 
-  if file_size > 16 * 1024 * 1024:
+  if file_size > 20 * 1024 * 1024:
     return [None, "Error: The upload exceeds file size 16MB. Please upload a smaller file."]
+  
+  #upload the video to AzureBlobStorage
+  AzureBlobStorageVideo.uploadUserVideoToBlobStorage(input_video,"test6")
   
   """
   Processes the uploaded video (replace with your video analysis logic).
@@ -35,6 +41,7 @@ def predict_video(input_video, input_audio=None):
 
   if input_audio is None:
     return [input_video, message + " Generated Audio will be used"]
+  AzureBlobStorageAudio.uploadUserAudioToBlobStorage(input_audio,"test8")
   return [input_video, message + f" Using uploaded audio: {input_audio.name}"]
 
 
@@ -85,6 +92,5 @@ with gr.Blocks(css=css) as demo:
       outputs=[video_out, text_out],
       queue=False
     )
-
 
 demo.launch(debug=True)
