@@ -1,3 +1,4 @@
+
 from azure.storage.blob import BlobServiceClient
 
 # Replace placeholders with your actual credentials
@@ -9,13 +10,16 @@ container_name = "useruploadhuggingfaceaudio"  # Update container name for audio
 file_path = r"C:\Users\ASUS\Desktop\UoW\2ND YEAR\SDGP\AUDIO\edit\3_second_audio.flac"  # Update path to your MP3 file
 file_name = "uploaded_audio.mp3"
 
-def deleteUserAudioFromBlobStorage(blob_client):
+
+def deleteUserAudioFromBlobStorage(container_client,blob_name):
     """Deletes the specified blob from Azure Blob Storage.
 
     Args:
         blob_client (BlobClient): The BlobClient object for the blob to delete.
     """
     try:
+        # Get the blob client within the function for deletion
+        blob_client = container_client.get_blob_client(blob_name)
         blob_client.delete_blob()
         print(f"Audio deleted successfully from Azure Blob Storage.")
     except Exception as e:
@@ -45,19 +49,18 @@ def uploadUserAudioToBlobStorage(file_path, file_name):
         # Create the blob client with the specified file name
         blob_client = container_client.get_blob_client(file_name)
 
+
         # Open the audio file in binary mode for upload
         with open(file_path, "rb") as data:
-            # Upload the audio data to the blob
-            upload_blob_result = blob_client.upload_blob(data)
+            # Upload the audio data to the blob allowing overwrites
+            upload_blob_result = blob_client.upload_blob(data, overwrite=True)
 
-            # Get the BlobClient object for deleting process
-            blob_client = container_client.get_blob_client(file_name)
 
             # Get the URL for the uploaded blob
             blob_url = blob_client.url
 
             print(f"Audio '{file_name}' uploaded successfully. URL: {blob_url}")
-            return blob_url
+            return blob_url  # Only return the URL
 
     except FileNotFoundError as e:
         print(f"Error: File not found at {file_path}.")
@@ -68,5 +71,10 @@ if __name__ == "__main__":
     # Example usage
     uploaded_audio_url = uploadUserAudioToBlobStorage(file_path, file_name)
     # use the uploaded_audio_url for further processing or sharing
-        # receive the enhanced video:
-    deleteUserAudioFromBlobStorage(blob_client)
+
+    # Retrieve container_client from within the upload function
+    blob_service_client = BlobServiceClient.from_connection_string(conn_str=connection_string)
+    container_client = blob_service_client.get_container_client(container_name)
+
+    # Pass container_client and file_name to the deletion function
+    deleteUserAudioFromBlobStorage(container_client, file_name)
