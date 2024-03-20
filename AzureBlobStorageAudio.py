@@ -9,6 +9,17 @@ container_name = "useruploadhuggingfaceaudio"  # Update container name for audio
 file_path = r"C:\Users\ASUS\Desktop\UoW\2ND YEAR\SDGP\AUDIO\edit\3_second_audio.flac"  # Update path to your MP3 file
 file_name = "uploaded_audio.mp3"
 
+def deleteUserAudioFromBlobStorage(blob_client):
+    """Deletes the specified blob from Azure Blob Storage.
+
+    Args:
+        blob_client (BlobClient): The BlobClient object for the blob to delete.
+    """
+    try:
+        blob_client.delete_blob()
+        print(f"Audio deleted successfully from Azure Blob Storage.")
+    except Exception as e:
+        print(f"Error deleting audio: {e}")
 
 def uploadUserAudioToBlobStorage(file_path, file_name):
     """Uploads an MP3 audio file to the specified Azure Blob Storage container and returns the URL.
@@ -39,6 +50,9 @@ def uploadUserAudioToBlobStorage(file_path, file_name):
             # Upload the audio data to the blob
             upload_blob_result = blob_client.upload_blob(data)
 
+            # Get the BlobClient object for deleting process
+            blob_client = container_client.get_blob_client(file_name)
+
             # Get the URL for the uploaded blob
             blob_url = blob_client.url
 
@@ -53,4 +67,6 @@ def uploadUserAudioToBlobStorage(file_path, file_name):
 if __name__ == "__main__":
     # Example usage
     uploaded_audio_url = uploadUserAudioToBlobStorage(file_path, file_name)
-    # You can now use the uploaded_audio_url for further processing or sharing
+    # use the uploaded_audio_url for further processing or sharing
+        # receive the enhanced video:
+    deleteUserAudioFromBlobStorage(blob_client)
