@@ -9,6 +9,22 @@ file_path = r"C:\Users\ASUS\Desktop\UoW\2ND YEAR\SDGP\HuggingFace\Video\producti
 file_name = "uploaded_video.mp4"
 
 
+
+def deleteUserVideoFromBlobStorage(container_client,blob_name):
+    """Deletes the specified blob from Azure Blob Storage.
+
+    Args:
+        blob_client (BlobClient): The BlobClient object for the blob to delete.
+    """
+    try:
+        # Get the blob client within the function for deletion
+        blob_client = container_client.get_blob_client(blob_name)
+        blob_client.delete_blob()
+        print(f"Video deleted successfully from Azure Blob Storage.")
+    except Exception as e:
+        print(f"Error deleting video: {e}")
+
+
 def uploadUserVideoToBlobStorage(file_path, file_name):
     """Uploads an MP4 video file to the specified Azure Blob Storage container and returns the URL.
 
@@ -36,7 +52,7 @@ def uploadUserVideoToBlobStorage(file_path, file_name):
         # Open the video file in binary mode for upload
         with open(file_path, "rb") as data:
             # Upload the video data to the blob
-            upload_blob_result = blob_client.upload_blob(data)
+            upload_blob_result = blob_client.upload_blob(data, overwrite=True)
 
             # Get the URL for the uploaded blob
             blob_url = blob_client.url
@@ -49,9 +65,15 @@ def uploadUserVideoToBlobStorage(file_path, file_name):
         raise  # Re-raise the exception for further handling
 
 if __name__ == "__main__":
-    
     # Example usage
     uploaded_video_url = uploadUserVideoToBlobStorage(file_path, file_name)
-    # You can now use the uploaded_video_url for further processing or sharing
+    # use the uploaded_video_url for further processing or sharing
+    # Retrieve container_client from within the upload function
+    blob_service_client = BlobServiceClient.from_connection_string(conn_str=connection_string)
+    container_client = blob_service_client.get_container_client(container_name)
+
+    # Pass container_client and file_name to the deletion function
+    deleteUserVideoFromBlobStorage(container_client,file_name)
+
 
 
