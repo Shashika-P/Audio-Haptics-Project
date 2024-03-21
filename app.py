@@ -51,8 +51,8 @@ css = """
   max-width: 800px;
 }
 """
-video_1 = os.path.join(os.path.dirname(__file__), "video/test1.mp4")
-audio_1 = os.path.join(os.path.dirname(__file__), "video/audioTrack.mp3")
+video_1 = os.path.join(os.path.dirname(__file__), "video/test_video.mp4")
+audio_1 = os.path.join(os.path.dirname(__file__), "audio/audioTrack.mp3")
 search_1 = "Explosions"
 with gr.Blocks(css=css) as demo:
   with gr.Column(elem_id="col-container"):
@@ -77,7 +77,8 @@ with gr.Blocks(css=css) as demo:
     with gr.Column():
       choice_in = gr.Dropdown(
             ["Explosions", "Lightning and Thunder", "Vehicle Racing"],value=callable(""),
-            label="Choose", info="Haptic Audio will be added for the selected instance in a video"
+            label="Choose", info="Haptic Audio will be added for the selected instance in a video",
+            allow_custom_value=True          
         )
       with gr.Row():
         btn_in = gr.Button("Submit", scale=0)
