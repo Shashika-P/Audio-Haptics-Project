@@ -5,7 +5,7 @@ import AzureBlobStorageVideo
 import AzureBlobStorageAudio
 
 
-def predict_video(input_video, input_audio=None):
+def predict_video(input_video, input_audio=None, input_choice="Explosion"):
   global filename, file_size  # Use the global keyword to refer to the global variables
   
   # Check if the video is available
@@ -68,30 +68,37 @@ with gr.Blocks(css=css) as demo:
       </p>
     """)
 
-    with gr.Row():
-        with gr.Column():
-          video_in = gr.File(label="Upload a Video", file_types=[".mp4"])
-        with gr.Column():
-           audio_in = gr.File(label="Optional: Upload an Audio Track", file_types=[".mp3"])
-        with gr.Column():
-          video_out = gr.Video(label="Output Video")
-          with gr.Row():
-            text_out = gr.Textbox(label="Output Text")
+ with gr.Row():
+    with gr.Column():
+      video_in = gr.File(label="Upload a Video", file_types=[".mp4"])
+      with gr.Row():
+        audio_in = gr.File(label="Optional: Upload an Audio Track", file_types=[".mp3"])
+    with gr.Column():
+      choice_in = gr.Dropdown(
+            ["Explosions", "Lightning and Thunder", "Vehicle Racing"],value=callable(""),
+            label="Choose", info="Haptic Audio will be added for the selected instance in a video."
+        )
+      with gr.Row():
+        btn_in = gr.Button("Submit", scale=0)
+    with gr.Column():
+      video_out = gr.Video(label="Output Video")
+      with gr.Row():
+        text_out = gr.Textbox(label="Output Text")
 
   gr.Examples(
-      examples=[[os.path.join(os.path.dirname(__file__), "video/test_video.mp4"),
-                os.path.join(os.path.dirname(__file__), "video/audioTrack.mp3")]],
+      examples=[["video/test1.mp4","video/audioTrack.mp3"]],
       fn=predict_video,
-      inputs=[video_in, audio_in],
+      inputs=[video_in, audio_in,choice_in],
       outputs=[video_out, text_out],
-      cache_examples= False  # Cache examples for faster loading
+      cache_examples=True  # Cache examples for faster loading
   )
 
-  video_in.change(
+  btn_in.click(
       fn=predict_video,
-      inputs=[video_in, audio_in],  # Use both video and audio inputs here
+      inputs=[video_in,audio_in,choice_in],
       outputs=[video_out, text_out],
       queue=False
-    )
+  )
+
 
 demo.launch(debug=True)
