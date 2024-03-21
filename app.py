@@ -5,7 +5,7 @@ import AzureBlobStorageVideo
 import AzureBlobStorageAudio
 
 
-def predict_video(input_video, input_audio=None, input_choice="Explosion"):
+def predict_video(input_video, input_audio=None, input_choice="Explosions"):
   global filename, file_size  # Use the global keyword to refer to the global variables
   
   # Check if the video is available
@@ -76,7 +76,7 @@ with gr.Blocks(css=css) as demo:
         audio_in = gr.File(label="Optional: Upload an Audio Track", file_types=[".mp3"])
     with gr.Column():
       choice_in = gr.Dropdown(
-            ["Explosions", "Lightning and Tunder", "Vehicle Racing"],value=callable(""),
+            ["Explosions", "Lightning and Thunder", "Vehicle Racing"],value=callable(""),
             label="Choose", info="Haptic Audio will be added for the selected instance in a video"
         )
       with gr.Row():
@@ -87,11 +87,11 @@ with gr.Blocks(css=css) as demo:
         text_out = gr.Textbox(label="Output Text")
 
   gr.Examples(
-      examples=[["video/test1.mp4","video/audioTrack.mp3"]],
+      examples=[[video_1,audio_1]],
       fn=predict_video,
       inputs=[video_in, audio_in,choice_in],
       outputs=[video_out, text_out],
-      cache_examples=True  # Cache examples for faster loading
+      #cache_examples=True  # Cache examples for faster loading
   )
 
   btn_in.click(
