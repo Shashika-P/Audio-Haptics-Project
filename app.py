@@ -3,6 +3,10 @@ import os
 from azure.storage.blob import BlobServiceClient
 import AzureBlobStorageVideo
 import AzureBlobStorageAudio
+from apiTest import sas_token_1
+from apiTest import sas_url_1
+from apiTest import videoAnalysis
+from apiTest import instance_1
 
 
 def predict_video(input_video, input_audio=None, input_choice="Explosions"):
@@ -35,6 +39,9 @@ def predict_video(input_video, input_audio=None, input_choice="Explosions"):
   Returns:
       A list containing the processed video and a message string.
   """
+ 
+  videoAnalysis(sas_url=sas_url_1,sas_token=sas_token_1, search=instance_1)
+
   # Placeholder processing (replace with actual video analysis)
   message = "**Placeholder:** Video processing not implemented yet."
 
