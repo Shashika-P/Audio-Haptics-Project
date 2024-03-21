@@ -45,14 +45,15 @@ def predict_video(input_video, input_audio=None, input_choice="Explosion"):
   AzureBlobStorageAudio.uploadUserAudioToBlobStorage(input_audio,"test8")
   return [input_video, message + f" Using uploaded audio: {input_audio.name}"]
 
-
 css = """
 #col-container {
   margin: 0 auto;
   max-width: 800px;
 }
 """
-
+video_1 = os.path.join(os.path.dirname(__file__), "video/test1.mp4")
+audio_1 = os.path.join(os.path.dirname(__file__), "video/audioTrack.mp3")
+search_1 = "Explosions"
 with gr.Blocks(css=css) as demo:
   with gr.Column(elem_id="col-container"):
     gr.HTML("""
@@ -68,15 +69,15 @@ with gr.Blocks(css=css) as demo:
       </p>
     """)
 
- with gr.Row():
+  with gr.Row():
     with gr.Column():
       video_in = gr.File(label="Upload a Video", file_types=[".mp4"])
       with gr.Row():
         audio_in = gr.File(label="Optional: Upload an Audio Track", file_types=[".mp3"])
     with gr.Column():
       choice_in = gr.Dropdown(
-            ["Explosions", "Lightning and Thunder", "Vehicle Racing"],value=callable(""),
-            label="Choose", info="Haptic Audio will be added for the selected instance in a video."
+            ["Explosions", "Lightning and Tunder", "Vehicle Racing"],value=callable(""),
+            label="Choose", info="Haptic Audio will be added for the selected instance in a video"
         )
       with gr.Row():
         btn_in = gr.Button("Submit", scale=0)
