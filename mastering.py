@@ -13,7 +13,10 @@ import subprocess
 
 
 def masterAudio(inputPath,outputPath):
-    master = subprocess.run(["node", "masteringModule/main.js", "--input", inputPath, "--output", outputPath])
+    try:
+        master = subprocess.run(["node", "masteringModule/main.js", "--input", inputPath, "--output", outputPath])
+    except subprocess.CalledProcessError as err:
+        print("Error running Mastering Module: ", err)
 
 # testing
 # masterAudio(inputPath,outputPath)
