@@ -1,17 +1,26 @@
 from moviepy.editor import *
 import json
 
-
-def moviepy(current_video_path,output_query_response):
-
+def load_json_output(output_query_response):
     # Convert JSON string to Python dictionary
-    data = json.loads(output_query_response)
+    return json.loads(output_query_response)
 
+def extract_audio_from_video(video_path):
+    video = VideoFileClip(video_path)
+    audio_path = "current_audio.mp3"
+    if video.audio is not None:
+        video.audio.write_audiofile(audio_path)
+        print("Audio file has been extracted from the video")
+        return audio_path
+    else:
+        print("No audio found in the video.")
+        return None
+
+def get_explosion_segments(json_data):
     # creating an empty array for the results
     result = []
-
     # iterate over every explosion occurrence and find start, end, best values using the ml algorithm
-    for i in data["value"]:
+    for i in json_data["value"]:
         result.append([i["start"], i["end"], i["best"]])
 
     # update start_explosion_time and end_explosion_time for each explosion occurrence
@@ -26,27 +35,17 @@ def moviepy(current_video_path,output_query_response):
         explosion[1] = "{:02d}:{:02d}:{:02d}".format(end_explosion_time_seconds // 3600,
                                                      (end_explosion_time_seconds % 3600 // 60),
                                                      end_explosion_time_seconds % 60)
+    return result
 
-    current_video = VideoFileClip(current_video_path)  # location of the uploaded video
-
-    # Extracting audio from the video
-    current_audio_path = "current_audio.mp3"
-    if current_video.audio is not None:
-        current_video.audio.write_audiofile(current_audio_path)  # location of the audio clip
-        print("Audio file has been extracted from the video")
-    else:
-        print("No audio found in the video.")
-
-    # Loading the whole audio clip from the uploaded video
-    current_audio = AudioFileClip(current_audio_path)
-
+def create_final_audio(current_audio_path, explosion_segments):
+    current_audio = AudioFileClip(current_audio_path)# location of the uploaded video
     # define the segments for the audio clips
     final_audio_segments = []
     haptic_audio_path = 'https://audiolibrary.blob.core.windows.net/audiolibrary/3_second_audio.flac'
     haptic_audio = AudioFileClip(haptic_audio_path)
 
     # Iterate through each explosion occurrence and create audio segments
-    for explosion in result:
+    for explosion in explosion_segments:
         start_explosion_time = sum(x * int(t) for x, t in zip([3600, 60, 1], explosion[0].split(":")))
         end_explosion_time = sum(x * int(t) for x, t in zip([3600, 60, 1], explosion[1].split(":")))
 
@@ -62,34 +61,49 @@ def moviepy(current_video_path,output_query_response):
 
     # concatenate final audio segments
     final_audio = concatenate_audioclips(final_audio_segments)
-
     # Match the audio duration with the video duration
-    final_audio = final_audio.set_duration(current_video.duration)
+    final_audio = final_audio.set_duration(current_audio.duration)
+    return final_audio
 
-    # Save the enhanced audio
-    final_audio_path = "output.mp3"
-    final_audio.write_audiofile(final_audio_path)
+def master_audio(audio_clip):
+    # Apply audio mastering techniques here
+    # Example: loudness normalization, equalization, compression, etc.
+    # Replace the following line with your audio mastering process
+    mastered_audio = audio_clip.fx(afx.audio_normalize)
+    return mastered_audio
+
+def save_audio(audio_clip, file_path):
+    audio_clip.write_audiofile(file_path)
     print("Enhanced audio has been created")
 
-    # create a video without audio
-    extracted_video = current_video.without_audio()
+def without_audio(video_clip):
+    return video_clip.without_audio()
 
-    # save the video without audio
-    extracted_video_path = "output.mp4"
-    extracted_video.write_videofile(extracted_video_path, fps=60)
-    print("Video without audio has been created")
+def combine_video_audio(video_clip, audio_clip):
+    return video_clip.set_audio(audio_clip)
 
-    # combine the final video without the enhanced audio
-    final_video = extracted_video.set_audio(final_audio)
-
-    # save the final video
-    final_video_path = "final_video.mp4"
-    final_video.write_videofile(final_video_path)
+def save_video(video_clip, file_path):
+    video_clip.write_videofile(file_path, fps=60)
     print("Final video has been created")
+
+def process_video(current_video_path, output_query_response):
+    json_data = load_json_output(output_query_response)
+    audio_path = extract_audio_from_video(current_video_path)
+    if audio_path:
+        explosion_segments = get_explosion_segments(json_data)
+        final_audio = create_final_audio(audio_path, explosion_segments)
+        final_audio_mastered = master_audio(final_audio)
+        save_audio(final_audio_mastered, "output.mp3")
+
+        current_video = VideoFileClip(current_video_path)# Extracting audio from the video
+        extracted_video = without_audio(current_video)
+        save_video(extracted_video, "output_without_audio.mp4")
+
+        final_video = combine_video_audio(extracted_video, final_audio_mastered)
+        save_video(final_video, "final_video.mp4")
 
 if __name__ == "__main__":
     current_video_path = r"C:\Users\ASUS\Desktop\UoW\2ND YEAR\SDGP\Test Video\test_video.mp4"
     output_query_response = '{"value":[{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:00:16","end":"00:00:26","best":"00:00:21","relevance":0.4005849361419678},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:00:06","end":"00:00:16","best":"00:00:09","relevance":0.38852864503860474},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:01:42","end":"00:01:58","best":"00:01:43","relevance":0.38718080520629883},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:01:58","end":"00:02:14","best":"00:02:03","relevance":0.3811851143836975},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:00:42","end":"00:00:52","best":"00:00:42","relevance":0.3765566647052765},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:00:26","end":"00:00:42","best":"00:00:28","relevance":0.3718773126602173},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:01:08","end":"00:01:24","best":"00:01:10","relevance":0.3707084357738495},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:01:37","end":"00:01:42","best":"00:01:38","relevance":0.36235538125038147},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:01:29","end":"00:01:37","best":"00:01:33","relevance":0.3606133460998535},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:01:03","end":"00:01:08","best":"00:01:04","relevance":0.3513660728931427},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:00:00","end":"00:00:06","best":"00:00:05","relevance":0.3378048241138458}]}'  # JSON response
-    moviepy(current_video_path,output_query_response)
-
+    process_video(current_video_path,output_query_response)
 
