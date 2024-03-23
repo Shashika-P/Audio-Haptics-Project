@@ -1,5 +1,8 @@
 import gradio as gr
 import os
+import subprocess
+# install moviepy dependency
+moviepy = subprocess.run(["pip", "install", "moviepy"])
 from azure.storage.blob import BlobServiceClient
 import AzureBlobStorageVideo
 import AzureBlobStorageAudio
@@ -7,7 +10,6 @@ from apiTest import sas_token_1
 from apiTest import sas_url_1
 from apiTest import videoAnalysis
 from apiTest import instance_1
-import Moviepy
 from Moviepy import extract_audio_from_video
 from Moviepy import load_json_output
 from Moviepy import get_explosion_segments
@@ -16,7 +18,6 @@ from Moviepy import save_audio
 from Moviepy import without_audio
 from Moviepy import combine_video_audio
 from Moviepy import save_video
-import subprocess
 from moviepy.editor import *
 import json
 
@@ -86,8 +87,6 @@ def predict_video(input_video, input_audio=None, input_choice="Explosions"):
   #npminstall = subprocess.run(["npm", "install", "masteringModule/package.json"])
   #os.chdir("..")
 
-  # install moviepy dependency
-  moviepy = subprocess.run(["pip", "install", "moviepy"])
 
   #	3.1. Extract audio from video
   #extractedAudioPath = extract_audio_from_video(input_video)
