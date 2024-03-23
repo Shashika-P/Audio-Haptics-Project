@@ -20,6 +20,7 @@ def mixingAudio(sound1_path, sound2_path,position):
   sound1_path = check_and_convert(sound1_path)
   sound2_path = check_and_convert(sound2_path)
 
+  # Load audio files
   sound1 = AudioSegment.from_file(sound1_path)
   sound2 = AudioSegment.from_file(sound2_path)
 
@@ -28,10 +29,4 @@ def mixingAudio(sound1_path, sound2_path,position):
 
   # Save the result (assuming mp3 format)
   output.export(r"mixedAudio\mixed_haptic_audioFile.mp3", format="mp3")
-  return "The audio have been mixed."
-
-
-# for testing 
-# sound1_path = r"audio\mixkit-distant-explosion-1690.wav"
-# sound2_path = r"audio\videoplayback_mastered (1).wav"
-# mixingAudio(sound1_path, sound2_path,1000)
+  return "The audio has been mixed."
