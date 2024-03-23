@@ -3,7 +3,6 @@ import os
 import subprocess
 # install moviepy dependencies
 moviepy = subprocess.run(["pip", "install", "moviepy"])
-ffmpegpip = subprocess.run(["pip", "install", "ffmpeg-python"])
 from azure.storage.blob import BlobServiceClient
 import AzureBlobStorageVideo
 import AzureBlobStorageAudio
