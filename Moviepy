@@ -97,7 +97,6 @@ def process_video(current_video_path, output_query_response):
 
         current_video = VideoFileClip(current_video_path)# Extracting audio from the video
         extracted_video = without_audio(current_video)
-        save_video(extracted_video, "output_without_audio.mp4")
 
         final_video = combine_video_audio(extracted_video, final_audio_mastered)
         save_video(final_video, "final_video.mp4")
