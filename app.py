@@ -112,6 +112,7 @@ with gr.Blocks(css=css) as demo:
             <br> <a href="https://audiolibrary.blob.core.windows.net/audiolibrary/5_seconds_vehicle_audio.mp3"> Vehicle Audio Track 1 </a>
             <br> <a href="https://audiolibrary.blob.core.windows.net/audiolibrary/30_seconds_vehicle_audio.mp3"> Vehicle Audio Track 2 </a>
             </p>
+            """)
             
   btn_in.click(
       fn=predict_video,
