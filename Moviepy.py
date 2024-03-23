@@ -7,7 +7,7 @@ def load_json_output(output_query_response):
 
 def extract_audio_from_video(video_path):
     video = VideoFileClip(video_path)
-    audio_path = "current_audio.mp3"
+    audio_path = "audio/current_audio.mp3"
     if video.audio is not None:
         video.audio.write_audiofile(audio_path)
         print("Audio file has been extracted from the video")
