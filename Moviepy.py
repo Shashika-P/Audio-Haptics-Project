@@ -27,8 +27,8 @@ def get_explosion_segments(json_data):
     for explosion in result:
         best_time = explosion[2]
         best_time_seconds = sum(x * int(t) for x, t in zip([3600, 60, 1], best_time.split(":")))
-        start_explosion_time_seconds = best_time_seconds - 1
-        end_explosion_time_seconds = best_time_seconds + 2
+        start_explosion_time_seconds = best_time_seconds - 2
+        end_explosion_time_seconds = best_time_seconds + 1
         explosion[0] = "{:02d}:{:02d}:{:02d}".format(start_explosion_time_seconds // 3600,
                                                      (start_explosion_time_seconds % 3600 // 60),
                                                      start_explosion_time_seconds % 60)
