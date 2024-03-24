@@ -8,22 +8,33 @@ connection_string = f"DefaultEndpointsProtocol=https;AccountName={storage_accoun
 container_name = "useruploadhuggingfacevideo"
 #file_path = r"C:\Users\isuru\Documents\IIT University\Modules\Year 2 - Semester 2\SDGP\HapticAudio SE09 Local Repo\gradio-env\HapticsProject\video\WIND ANIMATION.mp4"
 #file_name = "wind_video.mp4"
+target_container_id = 'useruploadhuggingfacevideo'
 
 
 
-def deleteUserVideoFromBlobStorage(container_client,blob_name):
-    """Deletes the specified blob from Azure Blob Storage.
+def deleteUserVideoFromBlobStorage(container_id: str) -> None:
+    """
+    Deletes all blobs within a specified Azure Blob Storage container.
 
     Args:
-        blob_client (BlobClient): The BlobClient object for the blob to delete.
+        container_id (str): The ID of the container to delete.
     """
     try:
-        # Get the blob client within the function for deletion
-        blob_client = container_client.get_blob_client(blob_name)
-        blob_client.delete_blob()
-        print(f"Video deleted successfully from Azure Blob Storage.")
+        # Establish connection using your storage connection string (replace with yours)
+        storage_connection_string = '<connection string>'
+        blob_service_client = azure.storage.blob.BlobServiceClient.from_connection_string(storage_connection_string)
+
+        # Get container client
+        container_client = blob_service_client.get_container_client(container_id)
+
+        # Delete all blobs in the container (iterator for large datasets)
+        blobs = container_client.list_blobs()
+        for blob in blobs:
+            container_client.delete_blob(blob.name)
+        print(f'Container "{container_id}" emptied successfully.')
+
     except Exception as e:
-        print(f"Error deleting video: {e}")
+        print(f'Error deleting blobs: {e}')
 
 
 def uploadUserVideoToBlobStorage(file_path, file_name):
@@ -93,6 +104,5 @@ if __name__ == "__main__":
     # Retrieve container_client from within the upload function
     blob_service_client = BlobServiceClient.from_connection_string(conn_str=connection_string)
     container_client = blob_service_client.get_container_client(container_name)
-
-    # Pass container_client and file_name to the deletion function
-    deleteUserVideoFromBlobStorage(container_client,file_name)
+    target_container_id = 'useruploadhuggingfacevideo'
+    deleteUserVideoFromBlobStorage(target_container_id)
