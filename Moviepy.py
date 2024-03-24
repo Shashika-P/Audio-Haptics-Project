@@ -37,11 +37,11 @@ def get_explosion_segments(json_data):
                                                      end_explosion_time_seconds % 60)
     return result
 
-def create_final_audio(current_audio_path, explosion_segments):
+def create_final_audio(current_audio_path, haptic_audio_path, explosion_segments):
     current_audio = AudioFileClip(current_audio_path)  # location of the uploaded video
     # define the segments for the audio clips
     final_audio_segments = []
-    haptic_audio_path = 'https://audiolibrary.blob.core.windows.net/audiolibrary/3_second_audio.flac'
+    #haptic_audio_path = haptic_audio_url
     haptic_audio = AudioFileClip(haptic_audio_path)
 
     # Iterate through each explosion occurrence and create audio segments
