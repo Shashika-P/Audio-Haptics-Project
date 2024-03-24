@@ -1,12 +1,13 @@
-from azure.storage.blob import BlobServiceClient
+from azure.storage.blob import BlobServiceClient, generate_blob_sas, BlobSasPermissions
+from datetime import datetime, timedelta
 
 # Parameters for linking Azure to the application
 storage_account_key = "zhrGpPBX6PVD+krncC4nVF4yoweEku/z2ErVxjLiuu/CjAVKqM5O4xlGWEyuWGxptL3mA1pv/6P4+AStjSjLEQ=="
 storage_account_name = "useruploadhuggingface"
 connection_string = f"DefaultEndpointsProtocol=https;AccountName={storage_account_name};AccountKey={storage_account_key};EndpointSuffix=core.windows.net"
 container_name = "useruploadhuggingfacevideo"
-file_path = r"C:\Users\ASUS\Desktop\UoW\2ND YEAR\SDGP\HuggingFace\Video\production_id_5091624 (1080p).mp4"
-file_name = "uploaded_video.mp4"
+#file_path = r"C:\Users\isuru\Documents\IIT University\Modules\Year 2 - Semester 2\SDGP\HapticAudio SE09 Local Repo\gradio-env\HapticsProject\video\WIND ANIMATION.mp4"
+#file_name = "wind_video.mp4"
 
 
 
@@ -64,6 +65,27 @@ def uploadUserVideoToBlobStorage(file_path, file_name):
         print(f"Error: File not found at {file_path}.")
         raise  # Re-raise the exception for further handling
 
+
+def generateSASToken(account_name,container_name, blob_name, account_key):
+    sas_token = generate_blob_sas(account_name=account_name,
+                              container_name=container_name,
+                              blob_name=blob_name,
+                              account_key=account_key,
+                              permission=BlobSasPermissions(read=True),
+                              expiry=datetime.utcnow() + timedelta(hours=1))
+
+    print(f"SAS Token generated:{sas_token}")
+
+    return sas_token
+
+
+def generateSASURL(account_name, container_name, blob_name, sas_token):
+
+    sas_url = 'https://' + account_name + '.blob.core.windows.net/' + container_name + '/' + blob_name + '?' + sas_token
+    print(f"SAS URL Generated: {sas_url}")
+
+    return sas_url
+
 if __name__ == "__main__":
     # Example usage
     uploaded_video_url = uploadUserVideoToBlobStorage(file_path, file_name)
@@ -74,6 +96,3 @@ if __name__ == "__main__":
 
     # Pass container_client and file_name to the deletion function
     deleteUserVideoFromBlobStorage(container_client,file_name)
-
-
-
