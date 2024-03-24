@@ -209,7 +209,7 @@ with gr.Blocks(css=css) as demo:
       <h3>Welcome to the Hugging Face Space of Phone brr! We aim to create more immersive content for mobile phones with the use of haptic audio, this demo focuses on working for a very commonly used special effect of explosions hope you enjoy it.</h3>
 
       <p>Instructions:
-        <br>Step 1: Upload your video.
+        <br>Step 1: Upload your MP4 video.
         <br>Step 2: (Optional) Upload an MP3 audio track.
         <br>Step 3: We'll analyze the video and suggest explosion timeframes using Azure Cognitive Services (not included yet).
         <br>Step 4: Download haptic explosion audio from [link to audio source].
