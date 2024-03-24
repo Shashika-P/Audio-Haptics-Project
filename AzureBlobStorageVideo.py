@@ -13,29 +13,31 @@ target_container_id = 'useruploadhuggingfacevideo'
 
 
 
-def deleteUserVideoFromBlobStorage(container_id: str) -> None:
-    """
-    Deletes all blobs within a specified Azure Blob Storage container.
+def delete_container(container_id: str) -> None:
+  """
+  Deletes all blobs within a specified Azure Blob Storage container.
 
-    Args:
-        container_id (str): The ID of the container to delete.
-    """
-    try:
-        # Establish connection using your storage connection string (replace with yours)
-        storage_connection_string = '<connection string>'
-        blob_service_client = azure.storage.blob.BlobServiceClient.from_connection_string(storage_connection_string)
+  Args:
+      container_id (str): The ID of the container to delete.
+  """
+  try:
+    # Establish connection using your storage connection string (replace with yours)
+    storage_connection_string = 'DefaultEndpointsProtocol=https;AccountName=useruploadhuggingface;AccountKey=zhrGpPBX6PVD+krncC4nVF4yoweEku/z2ErVxjLiuu/CjAVKqM5O4xlGWEyuWGxptL3mA1pv/6P4+AStjSjLEQ==;EndpointSuffix=core.windows.net'
+    blob_service_client = azure.storage.blob.BlobServiceClient.from_connection_string(storage_connection_string)
 
-        # Get container client
-        container_client = blob_service_client.get_container_client(container_id)
+    # Get container client
+    container_client = blob_service_client.get_container_client(container_id)
 
-        # Delete all blobs in the container (iterator for large datasets)
-        blobs = container_client.list_blobs()
-        for blob in blobs:
-            container_client.delete_blob(blob.name)
-        print(f'Container "{container_id}" emptied successfully.')
+    # Delete all blobs in the container (iterator for large datasets)
+    blobs = container_client.list_blobs()
+    for blob in blobs:
+        container_client.delete_blob(blob.name)
+    print(f'Container "{container_id}" emptied successfully.')
 
-    except Exception as e:
-        print(f'Error deleting blobs: {e}')
+  except Exception as e:
+    print(f'Error deleting blobs: {e}')
+
+
 
 
 def uploadUserVideoToBlobStorage(file_path, file_name):
