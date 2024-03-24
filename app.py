@@ -8,10 +8,7 @@ pipUpdate = subprocess.run(["pip", "install", "--upgrade", "pip"])
 from azure.storage.blob import BlobServiceClient
 import AzureBlobStorageVideo
 import AzureBlobStorageAudio
-from apiTest import sas_token_1
-from apiTest import sas_url_1
 from apiTest import videoAnalysis
-from apiTest import instance_1
 from Moviepy import extract_audio_from_video
 from Moviepy import load_json_output
 from Moviepy import get_explosion_segments
@@ -60,8 +57,8 @@ def predict_video(input_video, input_audio=None, input_choice="Explosions"):
   userAudioInputFlag = False
 
   if input_audio is not None:
-        audioFileName = "userInputAudio"
-        input_audio = AzureBlobStorageAudio.uploadUserAudioToBlobStorage(input_audio, audioFileName)
+        #audioFileName = "userInputAudio"
+        #input_audio = AzureBlobStorageAudio.uploadUserAudioToBlobStorage(input_audio, audioFileName)
         userAudioInputFlag = True
         #return [input_video, f" Using uploaded audio: {audioFileName}"]
   else:
@@ -77,8 +74,6 @@ def predict_video(input_video, input_audio=None, input_choice="Explosions"):
         else:
           input_audio = os.path.join(os.path.dirname(__file__), "audio/5_seconds_haptic_videos.mp3")
           print("default selected")
-
-        #return [input_video, f" {choice}"]
 
   #return [videoBlobURL, f" Using uploaded audio:"]
   #return [input_video, f" Using uploaded audio: {input_audio.name}"]
@@ -100,7 +95,7 @@ def predict_video(input_video, input_audio=None, input_choice="Explosions"):
   Returns:
       A list containing the processed video and a message string.
   """
- 
+
   responseQueryText = videoAnalysis(videoSASURL, videoSASToken, input_choice)
 
   #	IF method returns error: run analysis again
@@ -146,7 +141,7 @@ def predict_video(input_video, input_audio=None, input_choice="Explosions"):
   master = subprocess.run(["node", "masteringModule/main.js", "--input", finalAudioPath, "--output", finalAudioPath])
 
   if (userAudioInputFlag == True):
-      AzureBlobStorageAudio.deleteUserAudioFromBlobStorage(audio_container_name, audioFileName)
+      AzureBlobStorageVideo.delete_container('useruploadhuggingfaceaudio')
 
   # Extract video without audio
   current_video = without_audio(VideoFileClip(input_video))
@@ -195,6 +190,7 @@ def predict_video(input_video, input_audio=None, input_choice="Explosions"):
   return [finalVideoPath, f"Video enhancement successful"]
 
   # You can optionally add a progress bar or loading indicator here
+
 
 
 css = """
@@ -258,6 +254,7 @@ with gr.Blocks(css=css) as demo:
             <br> <a href="https://audiolibrary.blob.core.windows.net/audiolibrary/30_seconds_vehicle_audio.mp3"> Vehicle Audio Track 2 </a>
             </p>
             """)
+    
   btn_in.click(
       fn=predict_video,
       inputs=[video_in,audio_in,choice_in],
