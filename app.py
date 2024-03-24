@@ -138,7 +138,7 @@ def predict_video(input_video, input_audio=None, input_choice="Explosions"):
 
   # Apply audio mastering
 
-  master = subprocess.run(["node", "masteringModule/main.js", "--input", finalAudioPath, "--output", finalAudioPath])
+  #master = subprocess.run(["node", "masteringModule/main.js", "--input", finalAudioPath, "--output", finalAudioPath])
 
   if (userAudioInputFlag == True):
       AzureBlobStorageVideo.delete_container('useruploadhuggingfaceaudio')
