@@ -66,16 +66,16 @@ def predict_video(input_video, input_audio=None, input_choice="Explosions"):
         #return [input_video, f" Using uploaded audio: {audioFileName}"]
   else:
         if (input_choice == "Explosions"):
-          input_audio = "https://audiolibrary.blob.core.windows.net/audiolibrary/1_seconds_haptic_audio.mp3"
+          input_audio = os.path.join(os.path.dirname(__file__), "audio/1_seconds_haptic_audio.mp3")
           print("explosion selected")
         elif (input_choice == "Lightning and Thunder"):
-          input_audio = "https://audiolibrary.blob.core.windows.net/audiolibrary/8_seconds_Thunder.mp3"
+          input_audio = os.path.join(os.path.dirname(__file__), "audio/8_seconds_Thunder.mp3")
           print("lightning and thunder selected")
         elif (input_choice == "Vehicle Racing"):
-          input_audio = "https://audiolibrary.blob.core.windows.net/audiolibrary/5_seconds_vehicle_audio.mp3"
+          input_audio = os.path.join(os.path.dirname(__file__), "audio/5_seconds_vehicle_audio.mp3")
           print("vehicle racing selected")
         else:
-          input_audio = "https://audiolibrary.blob.core.windows.net/audiolibrary/5_seconds_haptic_videos.mp3"
+          input_audio = os.path.join(os.path.dirname(__file__), "audio/5_seconds_haptic_videos.mp3")
           print("default selected")
 
         #return [input_video, f" {choice}"]
