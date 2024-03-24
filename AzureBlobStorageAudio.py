@@ -7,23 +7,34 @@ storage_account_key = "zhrGpPBX6PVD+krncC4nVF4yoweEku/z2ErVxjLiuu/CjAVKqM5O4xlGW
 connection_string = f"DefaultEndpointsProtocol=https;AccountName={storage_account_name};AccountKey={storage_account_key};EndpointSuffix=core.windows.net"
 
 container_name = "useruploadhuggingfaceaudio"  # Update container name for audio files
-file_path = r"C:\Users\ASUS\Desktop\UoW\2ND YEAR\SDGP\AUDIO\edit\3_second_audio.flac"  # Update path to your MP3 file
-file_name = "uploaded_audio.mp3"
+#file_path = r"C:\Users\ASUS\Desktop\UoW\2ND YEAR\SDGP\AUDIO\edit\3_second_audio.flac"  # Update path to your MP3 file
+#file_name = "uploaded_audio.mp3"
 
 
-def deleteUserAudioFromBlobStorage(container_client,blob_name):
-    """Deletes the specified blob from Azure Blob Storage.
+def delete_container(container_id: str) -> None:
+  """
+  Deletes all blobs within a specified Azure Blob Storage container.
 
-    Args:
-        blob_client (BlobClient): The BlobClient object for the blob to delete.
-    """
-    try:
-        # Get the blob client within the function for deletion
-        blob_client = container_client.get_blob_client(blob_name)
-        blob_client.delete_blob()
-        print(f"Audio deleted successfully from Azure Blob Storage.")
-    except Exception as e:
-        print(f"Error deleting audio: {e}")
+  Args:
+      container_id (str): The ID of the container to delete.
+  """
+  try:
+    # Establish connection using your storage connection string (replace with yours)
+    storage_connection_string = 'DefaultEndpointsProtocol=https;AccountName=useruploadhuggingface;AccountKey=zhrGpPBX6PVD+krncC4nVF4yoweEku/z2ErVxjLiuu/CjAVKqM5O4xlGWEyuWGxptL3mA1pv/6P4+AStjSjLEQ==;EndpointSuffix=core.windows.net'
+    blob_service_client = azure.storage.blob.BlobServiceClient.from_connection_string(storage_connection_string)
+
+    # Get container client
+    container_client = blob_service_client.get_container_client(container_id)
+
+    # Delete all blobs in the container (iterator for large datasets)
+    blobs = container_client.list_blobs()
+    for blob in blobs:
+        container_client.delete_blob(blob.name)
+    print(f'Container "{container_id}" emptied successfully.')
+
+  except Exception as e:
+    print(f'Error deleting blobs: {e}')
+
 
 def uploadUserAudioToBlobStorage(file_path, file_name):
     """Uploads an MP3 audio file to the specified Azure Blob Storage container and returns the URL.
@@ -77,4 +88,4 @@ if __name__ == "__main__":
     container_client = blob_service_client.get_container_client(container_name)
 
     # Pass container_client and file_name to the deletion function
-    deleteUserAudioFromBlobStorage(container_client, file_name)
+    delete_container('useruploadhuggingfaceaudio')
