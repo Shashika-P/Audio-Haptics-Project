@@ -38,7 +38,7 @@ def get_explosion_segments(json_data):
     return result
 
 def create_final_audio(current_audio_path, explosion_segments):
-    current_audio = AudioFileClip(current_audio_path)# location of the uploaded video
+    current_audio = AudioFileClip(current_audio_path)  # location of the uploaded video
     # define the segments for the audio clips
     final_audio_segments = []
     haptic_audio_path = 'https://audiolibrary.blob.core.windows.net/audiolibrary/3_second_audio.flac'
@@ -46,17 +46,19 @@ def create_final_audio(current_audio_path, explosion_segments):
 
     # Iterate through each explosion occurrence and create audio segments
     for explosion in explosion_segments:
-        start_explosion_time = sum(x * int(t) for x, t in zip([3600, 60, 1], explosion[0].split(":")))
-        end_explosion_time = sum(x * int(t) for x, t in zip([3600, 60, 1], explosion[1].split(":")))
+        best_explosion_time = explosion[2]
+        best_explosion_time_seconds = sum(x * int(t) for x, t in zip([3600, 60, 1], best_explosion_time.split(":")))
 
-        beginning_audio_clip = current_audio.subclip(0, start_explosion_time)
-        end_audio_clip = current_audio.subclip(end_explosion_time)
-
-        # Adjust the duration of the haptic audio to match the duration between start and end explosion times
-        haptic_audio_duration = end_explosion_time - start_explosion_time
+        # Adjust the duration of the haptic audio to match the duration of the explosion
+        haptic_audio_duration = haptic_audio.duration
         haptic_audio_clip = haptic_audio.subclip(0, haptic_audio_duration)
 
-        final_audio = concatenate_audioclips([beginning_audio_clip, haptic_audio_clip, end_audio_clip])
+        # Create an audio clip starting from the best explosion time
+        explosion_audio_clip = current_audio.subclip(best_explosion_time_seconds - 1,
+                                                     best_explosion_time_seconds + haptic_audio_duration)
+
+        # Concatenate the haptic audio clip with the explosion audio clip
+        final_audio = concatenate_audioclips([explosion_audio_clip, haptic_audio_clip])
         final_audio_segments.append(final_audio)
 
     # concatenate final audio segments
@@ -64,7 +66,7 @@ def create_final_audio(current_audio_path, explosion_segments):
     # Match the audio duration with the video duration
     final_audio = final_audio.set_duration(current_audio.duration)
     return final_audio
-
+    
 def master_audio(audio_clip):
     # Apply audio mastering techniques here
     # Example: loudness normalization, equalization, compression, etc.
