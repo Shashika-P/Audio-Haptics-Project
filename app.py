@@ -107,7 +107,7 @@ def predict_video(input_video, input_audio=None, input_choice="Explosions"):
   if responseQueryText == """{"error":{"code":"InvalidRequest","message":"Value for indexName is invalid."}}""":
       responseQueryText = videoAnalysis(videoSASURL, videoSASToken, input_choice)
 
-  AzureBlobStorageVideo.deleteUserVideoFromBlobStorage(video_container_name,filename)
+  AzureBlobStorageVideo.delete_container('useruploadhuggingfacevideo')
 
   # 3. Use moviepy to add haptics to video
 
