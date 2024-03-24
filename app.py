@@ -215,7 +215,18 @@ with gr.Blocks(css=css) as demo:
       outputs=[video_out, text_out],
       #cache_examples=True  # Cache examples for faster loading
   )
-
+  with gr.Column():
+    gr.HTML("""
+            <h3> Audio Library </h2>
+            <p> <a href="https://audiolibrary.blob.core.windows.net/audiolibrary/1_seconds_haptic_audio.mp3"> Explosion Audio Track 1 </a>
+            <br> <a href="https://audiolibrary.blob.core.windows.net/audiolibrary/5_seconds_haptic_videos.mp3"> Explosion Audio Track 2 </a>
+            <br> <a href="https://audiolibrary.blob.core.windows.net/audiolibrary/6_seconds_haptic_audio.mp3"> Explosion Audio Track 3 </a>
+            <br> <a href="https://audiolibrary.blob.core.windows.net/audiolibrary/7_seconds_haptic_audio.mp3"> Explosion Audio Track 4 </a>
+            <br> <a href="https://audiolibrary.blob.core.windows.net/audiolibrary/9_seconds_haptic_videos.mp3"> Explosion Audio Track 5 </a>
+            <br> <a href="https://audiolibrary.blob.core.windows.net/audiolibrary/5_seconds_vehicle_audio.mp3"> Vehicle Audio Track 1 </a>
+            <br> <a href="https://audiolibrary.blob.core.windows.net/audiolibrary/30_seconds_vehicle_audio.mp3"> Vehicle Audio Track 2 </a>
+            </p>
+            """)
   btn_in.click(
       fn=predict_video,
       inputs=[video_in,audio_in,choice_in],
