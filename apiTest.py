@@ -136,17 +136,9 @@ sas_url_1= "https://store1video.blob.core.windows.net/haptic-vid/test_video.mp4?
 #query of what you are looking for 
 instance_1 = "Explosion"
 
-#calling the method returns the nested list of the time frames
-#test_explosion = videoAnalysis(sas_token_1, sas_url_1, instance_1)
-#print(test_explosion)
-
 #Enter the sas token
 sas_token_2 = "sp=r&st=2024-03-18T09:48:32Z&se=2026-07-02T17:48:32Z&spr=https&sv=2022-11-02&sr=b&sig=hLiFrDUtrutW9FWWRR7Z0Kbc4wkHs28YR9RXjVxw8uc%3D"
 #the sas url
 sas_url_2= "https://store1video.blob.core.windows.net/haptic-vid/desert_vehicle_test.mp4?sp=r&st=2024-03-18T09:48:32Z&se=2026-07-02T17:48:32Z&spr=https&sv=2022-11-02&sr=b&sig=hLiFrDUtrutW9FWWRR7Z0Kbc4wkHs28YR9RXjVxw8uc%3D"
 #query of what you are looking for 
 instance_2 = "Vehicle racing" 
-
-#calling the method returns the nested list of the time frames
-#test_vehicle = videoAnalysis(sas_token_2, sas_url_2, instance_2)
-#print(test_vehicle)
