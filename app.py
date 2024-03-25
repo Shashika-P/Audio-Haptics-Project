@@ -139,9 +139,10 @@ with gr.Blocks(css=css) as demo:
       <p>Instructions:
         <br>Step 1: Upload your MP4 video.
         <br>Step 2: (Optional) Upload an MP3 audio track.
-        <br>Step 3: We'll analyze the video and suggest explosion timeframes using Azure Cognitive Services (not included yet).
-        <br>Step 4: Download haptic explosion audio from [link to audio source].
-        <br>Step 5: Mix the Audio using any app of your choice and master the audio with an AI mastering program (links provided).
+        <br>Step 3:(Optional) Choose the instance you want haptics to be added to
+        <br>Step 4: Click on submit, and We'll analyse the video and suggest explosion timeframes using Azure Cognitive Services.
+        <br>Step 5: The Haptic Audio will be mixed into the video and enhanced through AI mastering.
+        <br>Step 6: View and download the final video with haptics.
       </p>
     """)
 
