@@ -57,10 +57,7 @@ def predict_video(input_video, input_audio=None, input_choice="Explosions"):
   userAudioInputFlag = False
 
   if input_audio is not None:
-        #audioFileName = "userInputAudio"
-        #input_audio = AzureBlobStorageAudio.uploadUserAudioToBlobStorage(input_audio, audioFileName)
         userAudioInputFlag = True
-        #return [input_video, f" Using uploaded audio: {audioFileName}"]
   else:
         if (input_choice == "Explosions"):
           input_audio = os.path.join(os.path.dirname(__file__), "audio/1_seconds_haptic_audio.mp3")
@@ -75,16 +72,6 @@ def predict_video(input_video, input_audio=None, input_choice="Explosions"):
           input_audio = os.path.join(os.path.dirname(__file__), "audio/5_seconds_haptic_videos.mp3")
           print("default selected")
 
-  #return [videoBlobURL, f" Using uploaded audio:"]
-  #return [input_video, f" Using uploaded audio: {input_audio.name}"]
-  #	IF user uploads audio file: upload audio file to blob storage
-  # ELSE use default audio file from blob storage
-
-
-  # message = "**Placeholder:** Video processing not implemented yet."
-
-  # 2. Analyze video and predict timestamps
-
   """
   Processes the uploaded video (replace with your video analysis logic).
 
@@ -95,7 +82,6 @@ def predict_video(input_video, input_audio=None, input_choice="Explosions"):
   Returns:
       A list containing the processed video and a message string.
   """
-
   responseQueryText = videoAnalysis(videoSASURL, videoSASToken, input_choice)
 
   #	IF method returns error: run analysis again
@@ -103,22 +89,6 @@ def predict_video(input_video, input_audio=None, input_choice="Explosions"):
       responseQueryText = videoAnalysis(videoSASURL, videoSASToken, input_choice)
 
   AzureBlobStorageVideo.delete_container('useruploadhuggingfacevideo')
-
-  # 3. Use moviepy to add haptics to video
-
-  #install masteringModule dependencies
-  #os.chdir("masteringModule")
-  #npminstall = subprocess.run(["npm", "install", "masteringModule/package.json"])
-  #os.chdir("..")
-
-  #	3.1. Extract audio from video
-  #extractedAudioPath = extract_audio_from_video(input_video)
-
-  #	3.2. Mix extracted audio with haptic audio
-
-  # Load JSON output
-  #output_query_response = '{"value":[{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:00:16","end":"00:00:26","best":"00:00:21","relevance":0.4005849361419678},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:00:06","end":"00:00:16","best":"00:00:09","relevance":0.38852864503860474},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:01:42","end":"00:01:58","best":"00:01:43","relevance":0.38718080520629883},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:01:58","end":"00:02:14","best":"00:02:03","relevance":0.3811851143836975},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:00:42","end":"00:00:52","best":"00:00:42","relevance":0.3765566647052765},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:00:26","end":"00:00:42","best":"00:00:28","relevance":0.3718773126602173},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:01:08","end":"00:01:24","best":"00:01:10","relevance":0.3707084357738495},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:01:37","end":"00:01:42","best":"00:01:38","relevance":0.36235538125038147},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:01:29","end":"00:01:37","best":"00:01:33","relevance":0.3606133460998535},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:01:03","end":"00:01:08","best":"00:01:04","relevance":0.3513660728931427},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:00:00","end":"00:00:06","best":"00:00:05","relevance":0.3378048241138458}]}'  # JSON response
-
 
   json_data = load_json_output(responseQueryText)
 
@@ -136,10 +106,6 @@ def predict_video(input_video, input_audio=None, input_choice="Explosions"):
   finalAudioPath = "audio/finalAudio.mp3"
   save_audio(final_audio, finalAudioPath)
 
-  # Apply audio mastering
-
-  #master = subprocess.run(["node", "masteringModule/main.js", "--input", finalAudioPath, "--output", finalAudioPath])
-
   if (userAudioInputFlag == True):
       AzureBlobStorageVideo.delete_container('useruploadhuggingfaceaudio')
 
@@ -153,45 +119,7 @@ def predict_video(input_video, input_audio=None, input_choice="Explosions"):
   save_video(final_video, "video/final_enhanced_video.mp4")
   finalVideoPath = "video/final_enhanced_video.mp4"
 
-  # 3.2.1. modify query response
-  #hard-coded query response
-  # output_query_response = '{"value":[{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:00:16","end":"00:00:26","best":"00:00:21","relevance":0.4005849361419678},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:00:06","end":"00:00:16","best":"00:00:09","relevance":0.38852864503860474},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:01:42","end":"00:01:58","best":"00:01:43","relevance":0.38718080520629883},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:01:58","end":"00:02:14","best":"00:02:03","relevance":0.3811851143836975},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:00:42","end":"00:00:52","best":"00:00:42","relevance":0.3765566647052765},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:00:26","end":"00:00:42","best":"00:00:28","relevance":0.3718773126602173},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:01:08","end":"00:01:24","best":"00:01:10","relevance":0.3707084357738495},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:01:37","end":"00:01:42","best":"00:01:38","relevance":0.36235538125038147},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:01:29","end":"00:01:37","best":"00:01:33","relevance":0.3606133460998535},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:01:03","end":"00:01:08","best":"00:01:04","relevance":0.3513660728931427},{"documentId":"sp=r&st=2024-02-09T12:33:24Z&se=2025-08-06T20:33:24Z&spr=https&sv=2022-11-02&sr=b&sig=V%2Fq56JjGcL60r0vt3oAPjzx%2FZMu5%2BJo%2BfjKkJF2ccgo%3D","documentKind":"VideoInterval","start":"00:00:00","end":"00:00:06","best":"00:00:05","relevance":0.3378048241138458}]}'  # JSON response
-  # modifiedQueryResponse = load_json_output(output_query_response)
-  #
-  # # 3.2.2. get timestamps of haptics segments
-  # hapticSegments = get_explosion_segments(modifiedQueryResponse)
-  #
-  # # 3.2.3. create final audio
-  # finalAudio = create_final_audio(extractedAudioPath, hapticSegments)
-  # finalAudioPath = "audio/finalAudio.mp3"
-  # save_audio(finalAudio, finalAudioPath)
-  #
-  # #	3.3. Master final audio file
-  # #master = subprocess.run(["node", "masteringModule/main.js", "--input", finalAudioPath, "--output", finalAudioPath])
-  #
-  # # 3.4. Prepare video file
-  # #muteVideo = without_audio(input_video)
-  # # currentVideoPath = "video/currentVideo.mp4"
-  # # save_video(input_video, currentVideoPath)
-  # # muteVideo = VideoFileClip(currentVideoPath)
-  # # muteVideo = muteVideo.without_audio()
-  # # mutevideoPath = "video/muteVideo.mp4"
-  # # save_video(muteVideo, mutevideoPath)
-  #
-  # #	3.5. Combine audio with video
-  # inputVideoPath = input_video
-  # currentVideoPath = "video/currentVideo.mp4"
-  # currentVideo = VideoFileClip(currentVideoPath)
-  #
-  # finalVideo = combine_video_audio(currentVideo,finalAudio)
-  # finalVideoPath = "video/finalEnhancedVideo.mp4"
-  # save_video(finalVideo, finalVideoPath)
-
   return [finalVideoPath, f"Video enhancement successful"]
-
-  # You can optionally add a progress bar or loading indicator here
-
-
 
 css = """
 #col-container {
@@ -261,6 +189,4 @@ with gr.Blocks(css=css) as demo:
       outputs=[video_out, text_out],
       queue=False
   )
-
-
 demo.launch(debug=True)
