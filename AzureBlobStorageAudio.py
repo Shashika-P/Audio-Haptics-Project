@@ -2,13 +2,11 @@
 from azure.storage.blob import BlobServiceClient
 
 # Replace placeholders with your actual credentials
-storage_account_name = "useruploadhuggingface"
-storage_account_key = "zhrGpPBX6PVD+krncC4nVF4yoweEku/z2ErVxjLiuu/CjAVKqM5O4xlGWEyuWGxptL3mA1pv/6P4+AStjSjLEQ=="
+storage_account_name = ""
+storage_account_key = ""
 connection_string = f"DefaultEndpointsProtocol=https;AccountName={storage_account_name};AccountKey={storage_account_key};EndpointSuffix=core.windows.net"
 
-container_name = "useruploadhuggingfaceaudio"  # Update container name for audio files
-#file_path = r"C:\Users\ASUS\Desktop\UoW\2ND YEAR\SDGP\AUDIO\edit\3_second_audio.flac"  # Update path to your MP3 file
-#file_name = "uploaded_audio.mp3"
+container_name = ""  # Update container name for audio files
 
 
 def delete_container(container_id: str) -> None:
@@ -20,7 +18,7 @@ def delete_container(container_id: str) -> None:
   """
   try:
     # Establish connection using your storage connection string (replace with yours)
-    storage_connection_string = 'DefaultEndpointsProtocol=https;AccountName=useruploadhuggingface;AccountKey=zhrGpPBX6PVD+krncC4nVF4yoweEku/z2ErVxjLiuu/CjAVKqM5O4xlGWEyuWGxptL3mA1pv/6P4+AStjSjLEQ==;EndpointSuffix=core.windows.net'
+    storage_connection_string = 'DefaultEndpointsProtocol=https;AccountName=  ;AccountKey=  ;EndpointSuffix=core.windows.net'
     blob_service_client = azure.storage.blob.BlobServiceClient.from_connection_string(storage_connection_string)
 
     # Get container client
@@ -88,4 +86,4 @@ if __name__ == "__main__":
     container_client = blob_service_client.get_container_client(container_name)
 
     # Pass container_client and file_name to the deletion function
-    delete_container('useruploadhuggingfaceaudio')
+    delete_container('')
