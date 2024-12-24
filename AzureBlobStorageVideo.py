@@ -3,13 +3,12 @@ from azure.storage.blob import BlobServiceClient, generate_blob_sas, BlobSasPerm
 from datetime import datetime, timedelta
 
 # Parameters for linking Azure to the application
-storage_account_key = "zhrGpPBX6PVD+krncC4nVF4yoweEku/z2ErVxjLiuu/CjAVKqM5O4xlGWEyuWGxptL3mA1pv/6P4+AStjSjLEQ=="
-storage_account_name = "useruploadhuggingface"
+storage_account_key = "  "
+storage_account_name = "  "
 connection_string = f"DefaultEndpointsProtocol=https;AccountName={storage_account_name};AccountKey={storage_account_key};EndpointSuffix=core.windows.net"
-container_name = "useruploadhuggingfacevideo"
-#file_path = r"C:\Users\isuru\Documents\IIT University\Modules\Year 2 - Semester 2\SDGP\HapticAudio SE09 Local Repo\gradio-env\HapticsProject\video\WIND ANIMATION.mp4"
-#file_name = "wind_video.mp4"
-target_container_id = 'useruploadhuggingfacevideo'
+container_name = "  "
+
+target_container_id = "  "
 
 
 
@@ -22,7 +21,7 @@ def delete_container(container_id: str) -> None:
   """
   try:
     # Establish connection using your storage connection string (replace with yours)
-    storage_connection_string = 'DefaultEndpointsProtocol=https;AccountName=useruploadhuggingface;AccountKey=zhrGpPBX6PVD+krncC4nVF4yoweEku/z2ErVxjLiuu/CjAVKqM5O4xlGWEyuWGxptL3mA1pv/6P4+AStjSjLEQ==;EndpointSuffix=core.windows.net'
+    storage_connection_string = 'DefaultEndpointsProtocol=https;AccountName=  ;AccountKey=  ;EndpointSuffix=core.windows.net'
     blob_service_client = azure.storage.blob.BlobServiceClient.from_connection_string(storage_connection_string)
 
     # Get container client
@@ -107,5 +106,5 @@ if __name__ == "__main__":
     # Retrieve container_client from within the upload function
     blob_service_client = BlobServiceClient.from_connection_string(conn_str=connection_string)
     container_client = blob_service_client.get_container_client(container_name)
-    target_container_id = 'useruploadhuggingfacevideo'
+    target_container_id = '  '
     deleteUserVideoFromBlobStorage(target_container_id)
