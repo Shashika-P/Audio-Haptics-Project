@@ -5,13 +5,13 @@ import os
 import ffmpeg
 
 audio_clip_mapping = {
-    "key1": "3_second_explosion_00001.flac",
+    "key1": "    ",
     # Add more key-value pairs as needed
 }
 
 # Initialize Azure Blob Storage client
-account_name = 'phonebrrdemonstration2'
-account_key = 'Q+EneUx5hlODHCjsSo49mm1bGVNdBd2wZ/T0yZMtag1C6FUIwr/yKf+XqDPmVF1PU81eitB2L3tN+AStD/eZ+A=='
+account_name = '    '
+account_key = '    '
 
 blob_service_client = BlobServiceClient(
     account_url=f"https://{account_name}.blob.core.windows.net",
@@ -19,7 +19,7 @@ blob_service_client = BlobServiceClient(
 )
 
 # Define the container name
-container_name = 'audio3second0001' # should define the what container should access 
+container_name = '    ' 
 
 # Define a function to retrieve audio clips by key
 def retrieve_audio_clip(key):
